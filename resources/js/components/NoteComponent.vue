@@ -4,28 +4,39 @@
     <form action="#" @submit.prevent="edit ? updateNote(note.id) : createNote()" class="d-lg-flex">
         <div class="form-group">
             <label>Type</label>
-            <select v-model="note.type" name="type" class="form-control">
-                <option value="1">Доходы</option>
+            <select v-model="note.type" name="type"  value="1" class="form-control" >
+                <option value="1" selected="selected">Доходы</option>
                 <option value="2">Расходы</option>
             </select>
         </div>
         <div class="form-group">
             <label>Category</label>
-            <select v-if="note.type === '1'" v-model="note.category_id" name="category_id" class="form-control">
+            <select v-model="note.category_id" name="category_id" class="form-control">
                 <option value="1">Заработная плата</option>
                 <option value="2">Другие доходы</option>
-            </select>
-            <select v-if="note.type === '2'" v-model="note.category_id" name="category_id" class="form-control">
                 <option value="3">Продукты питания</option>
             </select>
         </div>
+<!--         <div v-if="note.type === '1'" class="form-group">
+            <label>Category</label>
+            <select  v-model="note.category_id" name="category_id" class="form-control">
+                <option value="1">Заработная плата</option>
+                <option value="2">Другие доходы</option>
+            </select>
+        </div>
+        <div v-if="note.type === '2'" class="form-group">
+            <label>Category</label>
+            <select  v-model="note.category_id" name="category_id" class="form-control">
+                <option value="3">Продукты питания</option>
+            </select>
+        </div> -->
         <div class="form-group">
             <label>Amount</label>
             <input v-model="note.amount" type="number" name="amount" class="form-control">
         </div>
         <div class="form-group">
             <label>Date</label>
-            <input v-model="note.created_at" type="text" name="created_at" class="form-control">
+            <input v-model="note.created_at" type="text" name="created_at"class="form-control">
         </div>
         <div class="form-group">
             <label>Comment</label>
@@ -46,12 +57,14 @@
                 <th>Amount</th>
                 <th>Date</th>
                 <th>Comment</th>
+                <th>Control</th>
             </tr>
         </thead>
         <tbody>
       <tr v-for="note in noteList">
         <td><strong>{{note.type}}</strong></td>
-        <td>{{note.category_id}} </td>
+        <!-- <td>{{note.category_id}} </td> -->
+        <td>{{note.category.name}}</td>
         <td>{{note.amount}}</td>
         <td>{{note.created_at}} </td>
         <td>{{note.comment}}</td>
@@ -60,6 +73,8 @@
       </tr>
         </tbody>
     </table>
+
+
 
 
 
@@ -112,10 +127,27 @@
                 })
                 self.edit = true;
             },
+            createNote: function(){
+                console.log('Creating note...');
+                let self = this;
+                let params = Object.assign({}, self.note);
+                axios.post('/api/notes/store', params).then(function() {
+                    self.note.type = '';
+                    self.note.category_id = '';
+                    self.note.amount = '';
+                    self.note.created_at = '';
+                    self.note.comment = '';
+                    self.edit = false;
+                    self.fetchNotesList();
+                }).catch(function(error){
+                    console.log(error);
+                });
+                return;
+            },
             updateNote: function(id){
                 console.log('Updating note '+id+'...');
                 let self = this;
-                let params = Object.assign({}, self.category);
+                let params = Object.assign({}, self.note);
                 axios.patch('/api/notes/'+ id, params).then(function() {
                     self.note.type = '';
                     self.note.category_id = '';
@@ -123,7 +155,7 @@
                     self.note.created_at = '';
                     self.note.comment = '';
                     self.edit = false;
-                    self.fetchNoteList();
+                    self.fetchNotesList();
                 }).catch(function(error) {
                     console.log(error);
                 });

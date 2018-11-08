@@ -47416,6 +47416,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -47462,10 +47477,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
             self.edit = true;
         },
+        createNote: function createNote() {
+            console.log('Creating note...');
+            var self = this;
+            var params = Object.assign({}, self.note);
+            axios.post('/api/notes/store', params).then(function () {
+                self.note.type = '';
+                self.note.category_id = '';
+                self.note.amount = '';
+                self.note.created_at = '';
+                self.note.comment = '';
+                self.edit = false;
+                self.fetchNotesList();
+            }).catch(function (error) {
+                console.log(error);
+            });
+            return;
+        },
         updateNote: function updateNote(id) {
             console.log('Updating note ' + id + '...');
             var self = this;
-            var params = Object.assign({}, self.category);
+            var params = Object.assign({}, self.note);
             axios.patch('/api/notes/' + id, params).then(function () {
                 self.note.type = '';
                 self.note.category_id = '';
@@ -47473,7 +47505,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 self.note.created_at = '';
                 self.note.comment = '';
                 self.edit = false;
-                self.fetchNoteList();
+                self.fetchNotesList();
             }).catch(function (error) {
                 console.log(error);
             });
@@ -47527,7 +47559,7 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
-              attrs: { name: "type" },
+              attrs: { name: "type", value: "1" },
               on: {
                 change: function($event) {
                   var $$selectedVal = Array.prototype.filter
@@ -47547,7 +47579,9 @@ var render = function() {
               }
             },
             [
-              _c("option", { attrs: { value: "1" } }, [_vm._v("Доходы")]),
+              _c("option", { attrs: { value: "1", selected: "selected" } }, [
+                _vm._v("Доходы")
+              ]),
               _vm._v(" "),
               _c("option", { attrs: { value: "2" } }, [_vm._v("Расходы")])
             ]
@@ -47557,93 +47591,51 @@ var render = function() {
         _c("div", { staticClass: "form-group" }, [
           _c("label", [_vm._v("Category")]),
           _vm._v(" "),
-          _vm.note.type === "1"
-            ? _c(
-                "select",
+          _c(
+            "select",
+            {
+              directives: [
                 {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.note.category_id,
-                      expression: "note.category_id"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { name: "category_id" },
-                  on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.$set(
-                        _vm.note,
-                        "category_id",
-                        $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      )
-                    }
-                  }
-                },
-                [
-                  _c("option", { attrs: { value: "1" } }, [
-                    _vm._v("Заработная плата")
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "2" } }, [
-                    _vm._v("Другие доходы")
-                  ])
-                ]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.note.type === "2"
-            ? _c(
-                "select",
-                {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.note.category_id,
-                      expression: "note.category_id"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { name: "category_id" },
-                  on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.$set(
-                        _vm.note,
-                        "category_id",
-                        $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      )
-                    }
-                  }
-                },
-                [
-                  _c("option", { attrs: { value: "3" } }, [
-                    _vm._v("Продукты питания")
-                  ])
-                ]
-              )
-            : _vm._e()
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.note.category_id,
+                  expression: "note.category_id"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { name: "category_id" },
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.$set(
+                    _vm.note,
+                    "category_id",
+                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                  )
+                }
+              }
+            },
+            [
+              _c("option", { attrs: { value: "1" } }, [
+                _vm._v("Заработная плата")
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "2" } }, [
+                _vm._v("Другие доходы")
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "3" } }, [
+                _vm._v("Продукты питания")
+              ])
+            ]
+          )
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
@@ -47771,7 +47763,7 @@ var render = function() {
           return _c("tr", [
             _c("td", [_c("strong", [_vm._v(_vm._s(note.type))])]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(note.category_id) + " ")]),
+            _c("td", [_vm._v(_vm._s(note.category.name))]),
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(note.amount))]),
             _vm._v(" "),
@@ -47827,7 +47819,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Date")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Comment")])
+        _c("th", [_vm._v("Comment")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Control")])
       ])
     ])
   }

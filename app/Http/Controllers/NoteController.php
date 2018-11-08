@@ -15,7 +15,7 @@ class NoteController extends Controller
     public function index()
     {
 
-        return Note::all();
+        return Note::with('Category')->get();
     }
 
     /**
