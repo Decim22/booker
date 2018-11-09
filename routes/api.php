@@ -11,10 +11,10 @@ Route::get('/notes/', 'NoteController@index');
 Route::get('/notes/{id}', function($id) {
 	return Note::find($id);
 });
-
+Route::get('/types/', 'TypeController@index' );
 
 Route::patch('/notes/{id}', function(Request $request, $id) {
-	Note::findOrFail($id)->update(['type' => $request->input(['type']),
+	Note::findOrFail($id)->update(['type_id' => $request->input(['type_id']),
 		'category_id'  => $request->input(['category_id']),
 		'amount' => $request->input(['amount']),
 		'created_at' => $request->input(['created_at']),
@@ -23,7 +23,7 @@ Route::patch('/notes/{id}', function(Request $request, $id) {
 });
 
 Route::post('/notes/store', function(Request $request) {
-	return Note::create(['type' => $request->input(['type']),
+	return Note::create(['type_id' => $request->input(['type_id']),
 		'category_id'  => $request->input(['category_id']),
 		'amount' => $request->input(['amount']),
 		'created_at' => $request->input(['created_at']),

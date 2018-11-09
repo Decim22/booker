@@ -15,7 +15,7 @@ class NoteController extends Controller
     public function index()
     {
 
-        return Note::with('Category')->get();
+        return Note::with('Category', 'Type')->get();
     }
 
     /**
@@ -37,17 +37,17 @@ class NoteController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'type' => 'required',
+            'type_id' => 'required',
             'category_id' => 'required',
             'amount' => 'required'
         ]);
         $note = new Note;
         $note->category_id = $request->input('category_id');
-        $note->type = $request->input('type');
+        $note->type_id = $request->input('type_id');
         $post->amount = $request->input('amount');
         $post->comment = $request->input('comment');
         $post->save();
-        return redirect('/admin')->with('success', 'Post Created');
+        return redirect('/')->with('success', 'Note Created');
     }
 
     /**

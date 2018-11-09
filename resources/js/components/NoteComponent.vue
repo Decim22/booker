@@ -4,32 +4,19 @@
     <form action="#" @submit.prevent="edit ? updateNote(note.id) : createNote()" class="d-lg-flex">
         <div class="form-group">
             <label>Type</label>
-            <select v-model="note.type" name="type"  value="1" class="form-control" >
-                <option value="1" selected="selected">Доходы</option>
-                <option value="2">Расходы</option>
+            <select v-model="note.type_id" name="type_id" class="form-control" >
+                <option v-for="type in typeList" v-bind:value="type.id">{{type.name}}</option>
             </select>
         </div>
+
+
         <div class="form-group">
             <label>Category</label>
             <select v-model="note.category_id" name="category_id" class="form-control">
-                <option value="1">Заработная плата</option>
-                <option value="2">Другие доходы</option>
-                <option value="3">Продукты питания</option>
+                <option v-for="category in currentType.categories">{{category.name}}</option>
             </select>
         </div>
-<!--         <div v-if="note.type === '1'" class="form-group">
-            <label>Category</label>
-            <select  v-model="note.category_id" name="category_id" class="form-control">
-                <option value="1">Заработная плата</option>
-                <option value="2">Другие доходы</option>
-            </select>
-        </div>
-        <div v-if="note.type === '2'" class="form-group">
-            <label>Category</label>
-            <select  v-model="note.category_id" name="category_id" class="form-control">
-                <option value="3">Продукты питания</option>
-            </select>
-        </div> -->
+
         <div class="form-group">
             <label>Amount</label>
             <input v-model="note.amount" type="number" name="amount" class="form-control">
@@ -62,7 +49,7 @@
         </thead>
         <tbody>
       <tr v-for="note in noteList">
-        <td><strong>{{note.type}}</strong></td>
+        <td><strong>{{note.type.name}}</strong></td>
         <!-- <td>{{note.category_id}} </td> -->
         <td>{{note.category.name}}</td>
         <td>{{note.amount}}</td>
@@ -78,8 +65,6 @@
 
 
 
-
-
 </div>
 </template>
 
@@ -87,24 +72,42 @@
     export default {
         data: function() {
             return {
-            edit: false,
-            noteList: [],
-            note: {
-                id: '',
+                typeList: [],
+                type: {
+                    id: '',
+                    name: ''
+                },
+
+                edit: false,
                 type: '',
-                category_id: '',
-                amount: '',
-                comment: '',
-                created_at: '',
-                updated_at: ''
-            }
+                noteList: [],
+                note: {
+                    id: '',
+                    type_id: '',
+                    category_id: '',
+                    amount: '',
+                    comment: '',
+                    created_at: '',
+                    updated_at: ''
+                }
             }
         },
         mounted() {
             console.log('Component mounted.');
             this.fetchNotesList();
+            this.fetchTypeList();
         },
         methods: {
+            fetchTypeList:function() {
+                console.log('Fetching Types.....');
+                axios.get('/api/types')
+                .then((response)=> {
+                    console.log(response.data);
+                    this.typeList = response.data;
+                }).catch((error)=> {
+                    console.log(error);
+                });
+            },
             fetchNotesList:function(){
                 console.log('Fetching notes.....');
                 axios.get('/api/notes')
@@ -119,7 +122,7 @@
                 let self = this;
                 axios.get('/api/notes/'+id).then(function(response) {
                     self.note.id = response.data.id;
-                    self.note.type = response.data.type;
+                    self.note.type_id = response.data.type_id;
                     self.note.category_id = response.data.category_id;
                     self.note.amount = response.data.amount;
                     self.note.created_at = response.data.created_at;
@@ -132,7 +135,7 @@
                 let self = this;
                 let params = Object.assign({}, self.note);
                 axios.post('/api/notes/store', params).then(function() {
-                    self.note.type = '';
+                    self.note.type_id = '';
                     self.note.category_id = '';
                     self.note.amount = '';
                     self.note.created_at = '';
@@ -149,7 +152,7 @@
                 let self = this;
                 let params = Object.assign({}, self.note);
                 axios.patch('/api/notes/'+ id, params).then(function() {
-                    self.note.type = '';
+                    self.note.type_id = '';
                     self.note.category_id = '';
                     self.note.amount = '';
                     self.note.created_at = '';
