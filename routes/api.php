@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 
 use App\Category;
 use App\Note;
-
+use App\Type;
 
 
 Route::get('/notes/', 'NoteController@index');
@@ -12,6 +12,7 @@ Route::get('/notes/{id}', function($id) {
 	return Note::find($id);
 });
 Route::get('/types/', 'TypeController@index' );
+Route::get('/categories/', 'CategoryController@index');
 
 Route::patch('/notes/{id}', function(Request $request, $id) {
 	Note::findOrFail($id)->update(['type_id' => $request->input(['type_id']),

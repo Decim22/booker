@@ -47346,8 +47346,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+//
 //
 //
 //
@@ -47421,51 +47420,70 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
-        var _ref;
-
-        return _ref = {
+        return {
             typeList: [],
             type: {
                 id: '',
-                name: ''
+                name: '',
+                categories: []
             },
-
-            edit: false
-        }, _defineProperty(_ref, 'type', ''), _defineProperty(_ref, 'noteList', []), _defineProperty(_ref, 'note', {
-            id: '',
-            type_id: '',
-            category_id: '',
-            amount: '',
-            comment: '',
-            created_at: '',
-            updated_at: ''
-        }), _ref;
+            categoryList: [],
+            category: {
+                id: '',
+                type_id: '',
+                name: '',
+                notes: []
+            },
+            edit: false,
+            noteList: [],
+            note: {
+                id: '',
+                type_id: '',
+                category_id: '',
+                amount: '',
+                comment: '',
+                created_at: '',
+                updated_at: ''
+            }
+        };
     },
     mounted: function mounted() {
         console.log('Component mounted.');
         this.fetchNotesList();
         this.fetchTypeList();
+        this.fetchCategoryList();
     },
 
     methods: {
-        fetchTypeList: function fetchTypeList() {
+        fetchCategoryList: function fetchCategoryList() {
             var _this = this;
+
+            console.log('fetching categories');
+            axios.get('/api/categories').then(function (response) {
+                console.log(response.data);
+                _this.categoryList = response.data;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        fetchTypeList: function fetchTypeList() {
+            var _this2 = this;
 
             console.log('Fetching Types.....');
             axios.get('/api/types').then(function (response) {
                 console.log(response.data);
-                _this.typeList = response.data;
+                _this2.typeList = response.data;
             }).catch(function (error) {
                 console.log(error);
             });
         },
         fetchNotesList: function fetchNotesList() {
-            var _this2 = this;
+            var _this3 = this;
 
             console.log('Fetching notes.....');
             axios.get('/api/notes').then(function (response) {
                 console.log(response.data);
-                _this2.noteList = response.data;
+                _this3.noteList = response.data;
             }).catch(function (error) {
                 console.log(error);
             });
@@ -47550,7 +47568,7 @@ var render = function() {
       },
       [
         _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("Type")]),
+          _c("label", [_vm._v("Choose Type")]),
           _vm._v(" "),
           _c(
             "select",
@@ -47591,158 +47609,222 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("Category")]),
-          _vm._v(" "),
-          _c(
-            "select",
-            {
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.note.type_id !== "",
+                expression: "note.type_id !== ''"
+              }
+            ],
+            staticClass: "form-group"
+          },
+          [
+            _c("label", [_vm._v("Choose Category")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.note.category_id,
+                    expression: "note.category_id"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { name: "category_id" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.note,
+                      "category_id",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
+                }
+              },
+              _vm._l(_vm.categoryList, function(category) {
+                return category.type_id == _vm.note.type_id
+                  ? _c("option", { domProps: { value: category.id } }, [
+                      _vm._v(_vm._s(category.name))
+                    ])
+                  : _vm._e()
+              })
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.note.category_id !== "",
+                expression: "note.category_id !== ''"
+              }
+            ],
+            staticClass: "form-group"
+          },
+          [
+            _c("label", [_vm._v("Insert Amount")]),
+            _vm._v(" "),
+            _c("input", {
               directives: [
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.note.category_id,
-                  expression: "note.category_id"
+                  value: _vm.note.amount,
+                  expression: "note.amount"
                 }
               ],
               staticClass: "form-control",
-              attrs: { name: "category_id" },
+              attrs: { type: "number", name: "amount" },
+              domProps: { value: _vm.note.amount },
               on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.$set(
-                    _vm.note,
-                    "category_id",
-                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                  )
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.note, "amount", $event.target.value)
                 }
               }
-            },
-            _vm._l(_vm.currentType.categories, function(category) {
-              return _c("option", [_vm._v(_vm._s(category.name))])
             })
-          )
-        ]),
+          ]
+        ),
         _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("Amount")]),
-          _vm._v(" "),
-          _c("input", {
+        _c(
+          "div",
+          {
             directives: [
               {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.note.amount,
-                expression: "note.amount"
+                name: "show",
+                rawName: "v-show",
+                value: _vm.note.amount !== "",
+                expression: "note.amount !== ''"
               }
             ],
-            staticClass: "form-control",
-            attrs: { type: "number", name: "amount" },
-            domProps: { value: _vm.note.amount },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.note, "amount", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("Date")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.note.created_at,
-                expression: "note.created_at"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "text", name: "created_at" },
-            domProps: { value: _vm.note.created_at },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.note, "created_at", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("Comment")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.note.comment,
-                expression: "note.comment"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "text", name: "comment" },
-            domProps: { value: _vm.note.comment },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.note, "comment", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c(
-            "button",
-            {
+            staticClass: "form-group"
+          },
+          [
+            _c("label", [_vm._v("Insert Date")]),
+            _vm._v(" "),
+            _c("input", {
               directives: [
                 {
-                  name: "show",
-                  rawName: "v-show",
-                  value: !_vm.edit,
-                  expression: "!edit"
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.note.created_at,
+                  expression: "note.created_at"
                 }
               ],
-              staticClass: "btn btn-primary",
-              attrs: { type: "submit" }
-            },
-            [_vm._v("New Note")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
+              staticClass: "form-control",
+              attrs: { type: "date", name: "created_at" },
+              domProps: { value: _vm.note.created_at },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.note, "created_at", $event.target.value)
+                }
+              }
+            })
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.note.comment !== "",
+                expression: "note.comment !== ''"
+              }
+            ],
+            staticClass: "form-group"
+          },
+          [
+            _c("label", [_vm._v("Write a Comment")]),
+            _vm._v(" "),
+            _c("input", {
               directives: [
                 {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.edit,
-                  expression: "edit"
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.note.comment,
+                  expression: "note.comment"
                 }
               ],
-              staticClass: "btn btn-primary",
-              attrs: { type: "submit" }
-            },
-            [_vm._v("Update Note")]
-          )
+              staticClass: "form-control",
+              attrs: { type: "text", name: "comment" },
+              domProps: { value: _vm.note.comment },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.note, "comment", $event.target.value)
+                }
+              }
+            })
+          ]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group ml-5" }, [
+          _c("label", [_vm._v("Жми Кнопочку")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.edit,
+                    expression: "!edit"
+                  }
+                ],
+                staticClass: "btn btn-primary",
+                attrs: { type: "submit" }
+              },
+              [_vm._v("New Note")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.edit,
+                    expression: "edit"
+                  }
+                ],
+                staticClass: "btn btn-primary",
+                attrs: { type: "submit" }
+              },
+              [_vm._v("Update Note")]
+            )
+          ])
         ])
       ]
     ),

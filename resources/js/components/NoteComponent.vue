@@ -3,38 +3,39 @@
 
     <form action="#" @submit.prevent="edit ? updateNote(note.id) : createNote()" class="d-lg-flex">
         <div class="form-group">
-            <label>Type</label>
+            <label>Choose Type</label>
             <select v-model="note.type_id" name="type_id" class="form-control" >
                 <option v-for="type in typeList" v-bind:value="type.id">{{type.name}}</option>
             </select>
         </div>
 
-
-        <div class="form-group">
-            <label>Category</label>
+        <div v-show="note.type_id !== ''" class="form-group">
+            <label>Choose Category</label>
             <select v-model="note.category_id" name="category_id" class="form-control">
-                <option v-for="category in currentType.categories">{{category.name}}</option>
+                <option v-if="category.type_id == note.type_id" v-for="category in categoryList" v-bind:value="category.id" >{{category.name}}</option>
             </select>
         </div>
 
-        <div class="form-group">
-            <label>Amount</label>
+        <div v-show="note.category_id !== ''" class="form-group">
+            <label>Insert Amount</label>
             <input v-model="note.amount" type="number" name="amount" class="form-control">
         </div>
-        <div class="form-group">
-            <label>Date</label>
-            <input v-model="note.created_at" type="text" name="created_at"class="form-control">
+        <div v-show="note.amount !== ''" class="form-group">
+            <label>Insert Date</label>
+            <input v-model="note.created_at" type="date" name="created_at"class="form-control">
         </div>
-        <div class="form-group">
-            <label>Comment</label>
+        <div  v-show="note.comment !== ''" class="form-group">
+            <label>Write a Comment</label>
             <input v-model="note.comment" type="text" name="comment" class="form-control">
         </div>
-        <div class="form-group">
-            <button v-show="!edit" type="submit" class="btn btn-primary">New Note</button>
-            <button v-show="edit" type="submit" class="btn btn-primary">Update Note</button>
+        <div class="form-group ml-5">
+            <label>Жми Кнопочку</label>
+            <div class="form-group">
+                <button v-show="!edit" type="submit" class="btn btn-primary">New Note</button>
+                <button v-show="edit" type="submit" class="btn btn-primary">Update Note</button>
+            </div>
         </div>
     </form>
-
 
     <table class="table table-striped">
         <thead>
@@ -75,11 +76,17 @@
                 typeList: [],
                 type: {
                     id: '',
-                    name: ''
+                    name: '',
+                    categories: []
                 },
-
+                categoryList: [],
+                category: {
+                    id: '',
+                    type_id: '',
+                    name: '',
+                    notes: []
+                },
                 edit: false,
-                type: '',
                 noteList: [],
                 note: {
                     id: '',
@@ -96,8 +103,19 @@
             console.log('Component mounted.');
             this.fetchNotesList();
             this.fetchTypeList();
+            this.fetchCategoryList();
         },
         methods: {
+            fetchCategoryList:function() {
+                console.log('fetching categories');
+                axios.get('/api/categories')
+                .then((response)=> {
+                    console.log(response.data);
+                    this.categoryList = response.data;
+                }).catch((error)=> {
+                    console.log(error);
+                });            
+            },
             fetchTypeList:function() {
                 console.log('Fetching Types.....');
                 axios.get('/api/types')

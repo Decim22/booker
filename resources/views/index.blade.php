@@ -8,7 +8,7 @@
 </head>
 <body>
 	<div id="category">
-		<category></category>
+		{{-- <category></category> --}}
 	</div>
 	<div id="app">
 		<note></note>
