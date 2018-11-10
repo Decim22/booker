@@ -18,7 +18,8 @@ Route::patch('/notes/{id}', function(Request $request, $id) {
 	Note::findOrFail($id)->update(['type_id' => $request->input(['type_id']),
 		'category_id'  => $request->input(['category_id']),
 		'amount' => $request->input(['amount']),
-		'created_at' => $request->input(['created_at']),
+		// 'created_at' => $request->input(['created_at']),
+		'note_date' => $request->input(['note_date']),
 		'comment' => $request->input(['comment'])
 	]);
 });
@@ -27,9 +28,14 @@ Route::post('/notes/store', function(Request $request) {
 	return Note::create(['type_id' => $request->input(['type_id']),
 		'category_id'  => $request->input(['category_id']),
 		'amount' => $request->input(['amount']),
-		'created_at' => $request->input(['created_at']),
+		'note_date' => $request->input(['note_date']),
+		// 'created_at' => $request->input(['created_at']),
 		'comment' => $request->input(['comment'])
 	]);
+});
+
+Route::delete('/notes/{id}', function($id) {
+	return Note::destroy($id);
 });
 
 Route::get('/categories/', 'CategoryController@index');
