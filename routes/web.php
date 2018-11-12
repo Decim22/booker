@@ -11,11 +11,9 @@
 |
 */
 
-// Route::get('/', function () {
-//     return view('index.blade.php');
-// });
+Route::view('', 'index');
 
-// Route::view('/', 'index');
-
-Route::view('/notes/', 'notes');
+Route::view('notes', 'note');
+Route::view('/categories', 'category');
+// Route::view('/notes/', 'notes');
 // Route::get('/' ,'CategoryController@index');

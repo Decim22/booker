@@ -16,7 +16,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('note', require('./components/NoteComponent.vue'));
-
+Vue.component('category', require('./components/CategoryComponent.vue'));
 const app = new Vue({
-    el: '#app'
+    el: '#app',
 });

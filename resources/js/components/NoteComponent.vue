@@ -8,6 +8,7 @@
                 <option v-bind:value="category.id" v-for="category in categoryList">{{category.name}}</option>
             </select>
             <a href="#" v-show="form === false" v-on:click.prevent="formMy()" class="btn btn-primary mb-2 ml-4">Новая запись</a>
+            <a class="btn btn-primary mb-2 ml-4" href="/categories">Просмотр категорий</a>
         </div>
         <table class="table table-striped">
             <thead class="thead-dark">
@@ -35,7 +36,6 @@
     </div>
 
     <div class="mt-2">
-<!--         <a v-show="form === false" v-on:click="formMy()" class="btn btn-info mt-4 mb-5 ml-5">Новая запись</a> -->
         <div v-show="form === true" class="mb-5 mt-4 ml-5">
             <form action="#" @submit.prevent="edit ? updateNote(note.id) : createNote()">
                 <div class="form-group">
@@ -74,6 +74,7 @@
             </form>
         </div>
     </div>
+
 </div>
 </template>
 
@@ -231,7 +232,6 @@
                 }).catch(function(error) {
                     console.log(error);
                 });
-                sortByCat();
             }
         },
   

@@ -7,7 +7,7 @@ use App\Type;
 
 class Category extends Model
 {
-	protected $fillable = ['name'];
+	protected $fillable = ['name', 'type_id'];
 		public function type() {
 			return $this->belongsTo(Type::class);
 		}

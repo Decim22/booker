@@ -44,9 +44,9 @@ class NoteController extends Controller
         $note = new Note;
         $note->category_id = $request->input('category_id');
         $note->type_id = $request->input('type_id');
-        $post->amount = $request->input('amount');
-        $post->comment = $request->input('comment');
-        $post->save();
+        $note->amount = $request->input('amount');
+        $note->comment = $request->input('comment');
+        $note->save();
         return redirect('/')->with('success', 'Note Created');
     }
 

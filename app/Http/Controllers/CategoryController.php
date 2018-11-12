@@ -35,7 +35,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'type_id' => 'required',
+            'name' => 'required',
+        ]);
+        $category = new Category;
+        $note->type_id = $request->input('type_id');
+        $note->name = $request->input('name');
+        $note->save();
+        return redirect('/categories')->with('success', 'Category Created');
     }
 
     /**
