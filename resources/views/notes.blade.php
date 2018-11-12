@@ -7,9 +7,6 @@
 	<meta name="csrf-token" content="{{csrf_token()}}">
 </head>
 <body>
-	<div id="category">
-		{{-- <category></category> --}}
-	</div>
 	<div id="app">
 		<note></note>
 	</div>

@@ -15,5 +15,7 @@
 //     return view('index.blade.php');
 // });
 
-Route::view('/', 'index');
+// Route::view('/', 'index');
+
+Route::view('/notes/', 'notes');
 // Route::get('/' ,'CategoryController@index');

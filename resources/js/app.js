@@ -20,7 +20,3 @@ Vue.component('note', require('./components/NoteComponent.vue'));
 const app = new Vue({
     el: '#app'
 });
-Vue.component('category', require('./components//CategoryComponent.vue'));
-const category = new Vue({
-	el: '#category'
-});

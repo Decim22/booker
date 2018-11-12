@@ -1,77 +1,79 @@
 <template>
-<div class="d-lg-flex">
-    <div>
+<div class="d-lg-flex m-2">
+    <div class="mt-2 w-75">
+        <div class="mt-4 d-sm-flex">
+            <label class="font-weight-bold mt-2 mr-2 ">Фильтровать по категории:</label>
+            <select v-model="neededCategory" class="form-control mb-2 w-25">
+                <option v-bind:value="'all'">Все</option>
+                <option v-bind:value="category.id" v-for="category in categoryList">{{category.name}}</option>
+            </select>
+            <a href="#" v-show="form === false" v-on:click.prevent="formMy()" class="btn btn-primary mb-2 ml-4">Новая запись</a>
+        </div>
         <table class="table table-striped">
-            <thead>
+            <thead class="thead-dark">
                 <tr>
-                    <th class="mask flex-center rgba-red-strong">Type</th>
-                    <th class="mask flex-center rgba-red-strong">category</th>
-                    <th class="mask flex-center rgba-red-strong">Amount</th>
-                    <th class="mask flex-center rgba-red-strong">Date</th>
-                    <th>Comment</th>
-                    <th>Control</th>
+                    <th>Тип записи</th>
+                    <th>Категория</th>
+                    <th>Сумма</th>
+                    <th>Дата</th>
+                    <th>Комментарий</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-          <tr v-for="note in noteList">
+          <tr v-for="note in sortByCat">
             <td><strong>{{note.type.name}}</strong></td>
-            <!-- <td>{{note.category_id}} </td> -->
             <td>{{note.category.name}}</td>
             <td>{{note.amount}}</td>
             <td>{{note.note_date}} </td>
             <td>{{note.comment}}</td>
-            <td><button @click="showNote(note.id)" class="btn btn-success btn-xs">Edit</button>
-            <button @click="deleteNote(note.id)" class="btn btn-danger btn-xs">Delete</button></td>
+            <td><button @click="showNote(note.id)" class="btn btn-success btn-xs">Редактировать</button>
+            <button @click="deleteNote(note.id)" class="btn btn-danger btn-xs">Удалить</button></td>
           </tr>
             </tbody>
         </table>
     </div>
 
-
-
-    <div>
-        <a v-show="form === false" v-on:click="formMy()" class="btn btn-primary mb-5 mt-5 ml-5">New Note</a>
-        <div v-show="form === true" class="mb-5 mt-2 ml-5">
+    <div class="mt-2">
+<!--         <a v-show="form === false" v-on:click="formMy()" class="btn btn-info mt-4 mb-5 ml-5">Новая запись</a> -->
+        <div v-show="form === true" class="mb-5 mt-4 ml-5">
             <form action="#" @submit.prevent="edit ? updateNote(note.id) : createNote()">
                 <div class="form-group">
-                    <label>Choose Type</label>
-                    <select v-model="note.type_id" name="type_id" class="form-control" >
+                    <label class="badge">Тип Записи</label>
+                    <select v-model="note.type_id" name="type_id" class="form-control" required="required" >
                         <option v-for="type in typeList" v-bind:value="type.id">{{type.name}}</option>
                     </select>
                 </div>
 
-                <div  class="form-group">
-                    <label>Choose Category</label>
-                    <select v-model="note.category_id" name="category_id" class="form-control">
+                <div class="form-group">
+                    <label class="badge">Категория</label>
+                    <select v-model="note.category_id" name="category_id" class="form-control" required="required">
                         <option v-if="category.type_id == note.type_id" v-for="category in categoryList" v-bind:value="category.id" >{{category.name}}</option>
                     </select>
                 </div>
 
                 <div  class="form-group">
-                    <label>Insert Amount</label>
+                    <label class="badge">Сумма</label>
                     <input v-model="note.amount" type="number" required="required" name="amount" class="form-control">
                 </div>
                 <div  class="form-group">
-                    <label>Insert Date</label>
+                    <label class="badge">Дата</label>
                     <input v-model="note.note_date" required="required" type="date" id="date" name="note_date"class="form-control">
                 </div>
                 <div   class="form-group">
-                    <label>Write a Comment</label>
-                    <input v-model="note.comment" type="text" name="comment" class="form-control">
+                    <label class="badge">Комментарий</label>
+                    <textarea v-model="note.comment" type="text" name="comment" class="form-control"></textarea>
                 </div>
                 <div class="form-group ml-5">
                     <div  class="form-group">
-                        <button v-show="!edit" type="submit" class="btn btn-primary">Submit</button>
-                        <button v-show="edit" type="submit" class="btn btn-primary">Update Note</button>
-                        <a v-on:click="clearForm()" v-show="note.category_id !== '', edit" class="btn btn-primary mb-5 mt-5 ml-5">New Note</a>
+                        <button v-show="!edit" type="submit" class="btn btn-primary">Сделать запись</button>
+                        <button v-show="edit" type="submit" class="btn btn-primary">Обновить</button>
+                        <a v-on:click="clearForm(), formMy()" v-show="note.category_id !== '', edit" class="btn btn-primary mb-5 mt-5 ml-5">Назад</a>
                     </div>
                 </div>
-
             </form>
         </div>
     </div>
-
-
 </div>
 </template>
 
@@ -79,6 +81,7 @@
     export default {
         data: function() {
             return {
+                neededCategory: 'all',
                 form: false,
                 typeList: [],
                 type: {
@@ -117,16 +120,15 @@
             formMy:function() {
                 self = this;
                 this.form = true;
-                    Date.prototype.yyyymmdd = function() {
-                        let mm = this.getMonth() + 1 +'-'; // getMonth() is zero-based
-                        let dd = this.getDate();
-                        return [this.getFullYear()+ '-',
-                            (mm>9 ? '' : '') + mm,
-                            (dd>9 ? '' : '0') + dd
-                        ].join('');
+                Date.prototype.yyyymmdd = function() {
+                    let mm = this.getMonth() + 1 +'-';
+                    let dd = this.getDate();
+                    return [this.getFullYear()+ '-',
+                        (mm>9 ? '' : '') + mm,
+                        (dd>9 ? '' : '0') + dd
+                    ].join('');
                 };
                 var date = new Date();
-                // console.log(date.yyyymmdd());
                 this.note.note_date = date.yyyymmdd();
                 console.log(this.note.note_date);
             },
@@ -138,7 +140,7 @@
                     this.categoryList = response.data;
                 }).catch((error)=> {
                     console.log(error);
-                });            
+                });
             },
             fetchTypeList:function() {
                 console.log('Fetching Types.....');
@@ -155,7 +157,7 @@
                 axios.get('/api/notes')
                   .then((response) => {
                     console.log(response.data);
-                    this.noteList = response.data;
+                    this.noteList = response.data.reverse();
                   }).catch((error) => {
                     console.log(error);
                   });
@@ -193,13 +195,13 @@
                     self.note.category_id = '';
                     self.note.amount = '';
                     self.note.note_date = '';
-                    // self.note.created_at = '';
                     self.note.comment = '';
                     self.edit = false;
                     self.form = false;
                     self.fetchNotesList();
                 }).catch(function(error){
                     console.log(error);
+                    sortByCat();
                 });
                 return;
             },
@@ -212,7 +214,6 @@
                     self.note.category_id = '';
                     self.note.amount = '';
                     self.note.note_date = '';
-                    // self.note.created_at = '';
                     self.note.comment = '';
                     self.edit = false;
                     self.form = false;
@@ -230,7 +231,18 @@
                 }).catch(function(error) {
                     console.log(error);
                 });
+                sortByCat();
             }
         },
+  
+        computed: {
+            sortByCat() {
+                if (this.neededCategory == 'all')
+                    return this.noteList
+                else
+                    return this.noteList.filter(note => note.category_id == this.neededCategory)
+            }
+        }
+
     }
 </script>
