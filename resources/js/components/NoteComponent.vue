@@ -8,7 +8,6 @@
                 <option v-bind:value="category.id" v-for="category in categoryList">{{category.name}}</option>
             </select>
             <a href="#" v-show="form === false" v-on:click.prevent="formMy()" class="btn btn-primary mb-2 ml-4">Новая запись</a>
-            <a class="btn btn-primary mb-2 ml-4" href="/categories">Просмотр категорий</a>
         </div>
         <table class="table table-striped">
             <thead class="thead-dark">
@@ -198,7 +197,7 @@
                     self.note.note_date = '';
                     self.note.comment = '';
                     self.edit = false;
-                    self.form = false;
+                    self.form = true;
                     self.fetchNotesList();
                 }).catch(function(error){
                     console.log(error);
@@ -217,7 +216,7 @@
                     self.note.note_date = '';
                     self.note.comment = '';
                     self.edit = false;
-                    self.form = false;
+                    self.form = true;
                     self.fetchNotesList();
                 }).catch(function(error) {
                     console.log(error);

@@ -7,6 +7,7 @@
 	<meta name="csrf-token" content="{{csrf_token()}}">
 </head>
 <body>
+	@include('layout.nav')
 	<div id="app">
 		<category></category>
 	</div>

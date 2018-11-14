@@ -7,9 +7,11 @@
 </head>
 <body class="d-flex align-items-center justify-content-center">
     <div class="text-center mt-5">
+    	<img src="1.jpg">
         <h1>Simple BOOKER by Decim22</h1>
         <a class="btn btn-primary" href="/notes">Работа с записями</a>
         <a class="btn btn-primary" href="/categories"> Работа с категориями</a></div>
+
 
 </body>
 </html>

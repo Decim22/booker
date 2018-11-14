@@ -47421,7 +47421,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -47543,7 +47542,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 self.note.note_date = '';
                 self.note.comment = '';
                 self.edit = false;
-                self.form = false;
+                self.form = true;
                 self.fetchNotesList();
             }).catch(function (error) {
                 console.log(error);
@@ -47562,7 +47561,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 self.note.note_date = '';
                 self.note.comment = '';
                 self.edit = false;
-                self.form = false;
+                self.form = true;
                 self.fetchNotesList();
             }).catch(function (error) {
                 console.log(error);
@@ -47668,15 +47667,6 @@ var render = function() {
             }
           },
           [_vm._v("Новая запись")]
-        ),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-primary mb-2 ml-4",
-            attrs: { href: "/categories" }
-          },
-          [_vm._v("Просмотр категорий")]
         )
       ]),
       _vm._v(" "),
@@ -48130,7 +48120,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -48293,12 +48282,6 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "mt-2 ml-4" }, [
-        _c(
-          "a",
-          { staticClass: "btn btn-primary mb-2", attrs: { href: "/notes" } },
-          [_vm._v("Записи")]
-        ),
-        _vm._v(" "),
         _c(
           "a",
           {

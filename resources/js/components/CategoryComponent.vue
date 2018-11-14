@@ -23,7 +23,6 @@
             </table>
 
             <div class="mt-2 ml-4">
-            <a href="/notes" class="btn btn-primary mb-2">Записи</a>
                 <a href="#" v-show="form === false" v-on:click.prevent="form = true" class="btn btn-primary mb-2">Добавить категорию</a>
                 <form v-show="form === true" class="w-50" @submit.prevent="edit ? updateCategory(category.id) : createCategory()">
                    <div v-for="type in typeList" class="form-group">
